@@ -73,5 +73,4 @@ const toggleFollow = async (req, res) => {
 
 
 
-
 export { getUser , toggleFollow } ;

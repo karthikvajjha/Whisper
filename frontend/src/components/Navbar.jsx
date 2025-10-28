@@ -23,20 +23,30 @@ function Navbar() {
 
   const isActive = (path) => location.pathname === path;
 
+  const navItems = [
+    
+  { name: "Home", path: "/" },
+  { name: "Blogs", path: "/blogs" },
+  { name: "Diary", path: "/diary" },
+  { name: "Create", path: "/create" },
+  { name: "Quiz", path: "/quiz" },
+  { name: "Scenario", path: "/scenario" },
+  { name: "Leaderboard", path: "/leaderboard" },
+
+
+  ];
+
   return (
     <nav className="bg-[#1E2328] text-gray-200 px-6 py-4 flex items-center justify-between">
       {/* Left Section */}
-      <div className="flex gap-6">
-        {[
-          { name: "Home", path: "/" },
-          { name: "Blogs", path: "/blogs" },
-          { name: "Diary", path: "/diary" },
-          { name: "Create", path: "/create" },
-        ].map((item) => (
+      <div className="flex gap-6 flex-wrap">
+        {navItems.map((item) => (
           <button
             key={item.name}
             className={`relative hover:text-[#00b020] transition ${
-              isActive(item.path) ? "after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[2px] after:bg-[#00b020]" : ""
+              isActive(item.path)
+                ? "after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[2px] after:bg-[#00b020]"
+                : ""
             }`}
             onClick={() => handleNavigation(item.path)}
           >

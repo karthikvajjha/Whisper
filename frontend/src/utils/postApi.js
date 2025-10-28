@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance";
+import {axiosInstance} from "./axiosInstance";
 
 export const getPost = async (postId) => {
   const res = await axiosInstance.get(`/posts/id/${postId}`);

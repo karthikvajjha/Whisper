@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance";
+import {axiosInstance} from "./axiosInstance";
 
 export const signupUser = async (userData) => {
   const res = await axiosInstance.post("/auth/signup", userData);

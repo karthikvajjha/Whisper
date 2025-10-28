@@ -7,6 +7,8 @@ import { router as userRouter } from './routes/userRoutes.js';
 
 import { router as postRouter } from './routes/postRoutes.js';
 
+import { router as gameRouter } from './routes/gameRoutes.js';
+
 import mongoose from 'mongoose'
 
 import dotenv from 'dotenv'
@@ -35,6 +37,8 @@ app.use('/api', authRouter);
 app.use('/api',  userRouter);
 
 app.use('/api',  postRouter);
+
+app.use('/api' , gameRouter);
 
 app.get("/", (req, res) => res.send("Server is running"));
 
