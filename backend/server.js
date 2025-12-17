@@ -23,6 +23,12 @@ const app = express();
 
 app.use(cors());
 
+app.use(cors({
+  origin: "https://spectacular-elf-faf6cc.netlify.app",
+  credentials: true
+}));
+
+
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
   res.set('Pragma', 'no-cache');
