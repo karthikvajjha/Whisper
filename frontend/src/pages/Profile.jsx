@@ -12,6 +12,7 @@ export default function Profile() {
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState(null);
+  const [notFound, setNotFound] = useState(false);
   const [followersVisible, setFollowersVisible] = useState(false);
   const [followingVisible, setFollowingVisible] = useState(false);
   const [blogsCount, setBlogsCount] = useState(0);
@@ -23,13 +24,19 @@ export default function Profile() {
     const fetchProfileData = async () => {
       if (!profileOwner) return;
 
-      const data = await getProfile(profileOwner);
-      setProfile(data);
+      try {
+        setNotFound(false);
+        const data = await getProfile(profileOwner);
+        setProfile(data);
 
-      const posts = await getPosts(profileOwner);
-      setBlogsCount(posts.filter(p => p.isPublic).length);
-      if (isOwner) {
-        setDiaryCount(posts.filter(p => !p.isPublic).length);
+        const posts = await getPosts(profileOwner);
+        setBlogsCount(posts.filter(p => p.isPublic).length);
+        if (isOwner) {
+          setDiaryCount(posts.filter(p => !p.isPublic).length);
+        }
+      } catch (err) {
+        setNotFound(true);
+        setProfile(null);
       }
     };
 
@@ -42,14 +49,32 @@ export default function Profile() {
     setProfile(updatedProfile);
   };
 
-  if (!profile)
+  if (notFound) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#14181C]">
+        <div className="bg-[#1E2328] px-8 py-6 rounded-xl shadow-md text-center">
+          <h1 className="text-3xl font-bold text-[#90C67C]">
+            User doesn’t exist
+          </h1>
+          <p className="text-gray-400 mt-2">
+            The profile you’re looking for was not found
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!profile) {
     return (
       <div className="min-h-screen flex items-center justify-center text-gray-400 bg-[#14181C]">
         Loading...
       </div>
     );
+  }
 
-  const isFollowing = profile.followers.some(f => f.username === username);
+  const isFollowing = profile.followers.some(
+    f => f.username === username
+  );
 
   return (
     <div className="min-h-screen bg-[#14181C] text-gray-200 px-6 py-10 max-w-5xl mx-auto">
@@ -60,19 +85,24 @@ export default function Profile() {
             {profileOwner[0].toUpperCase()}
           </div>
           <div className="flex flex-col">
-            <h1 className="text-3xl font-bold text-[#90C67C]">{profileOwner}</h1>
-            <p className="text-gray-400 mt-1">{profile.bio || "No bio provided"}</p>
+            <h1 className="text-3xl font-bold text-[#90C67C]">
+              {profileOwner}
+            </h1>
+            <p className="text-gray-400 mt-1">
+              {profile.bio || "No bio provided"}
+            </p>
           </div>
         </div>
 
-        {/* Follow/Unfollow button */}
         {!isOwner && (
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleFollowToggle}
             className={`px-5 py-2 rounded-lg text-white font-semibold transition ${
-              isFollowing ? "bg-red-500 hover:bg-red-400" : "bg-green-500 hover:bg-green-400"
+              isFollowing
+                ? "bg-red-500 hover:bg-red-400"
+                : "bg-green-500 hover:bg-green-400"
             }`}
           >
             {isFollowing ? "Unfollow" : "Follow"}
@@ -80,14 +110,16 @@ export default function Profile() {
         )}
       </div>
 
-      {/* Stats cards */}
+      {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <motion.div
           className="bg-[#1E2328] p-4 rounded-xl flex flex-col items-center shadow-md hover:shadow-lg transition"
           whileHover={{ scale: 1.03 }}
         >
           <p className="text-gray-400 text-sm">Followers</p>
-          <p className="text-xl font-bold text-[#E1EEBC]">{profile.followers.length}</p>
+          <p className="text-xl font-bold text-[#E1EEBC]">
+            {profile.followers.length}
+          </p>
         </motion.div>
 
         <motion.div
@@ -95,7 +127,9 @@ export default function Profile() {
           whileHover={{ scale: 1.03 }}
         >
           <p className="text-gray-400 text-sm">Following</p>
-          <p className="text-xl font-bold text-[#E1EEBC]">{profile.following.length}</p>
+          <p className="text-xl font-bold text-[#E1EEBC]">
+            {profile.following.length}
+          </p>
         </motion.div>
 
         <motion.div
@@ -104,7 +138,9 @@ export default function Profile() {
           onClick={() => navigate(`/blogs?user=${profileOwner}`)}
         >
           <p className="text-gray-400 text-sm">Blogs</p>
-          <p className="text-xl font-bold text-[#90C67C]">{blogsCount}</p>
+          <p className="text-xl font-bold text-[#90C67C]">
+            {blogsCount}
+          </p>
         </motion.div>
 
         {isOwner && (
@@ -114,14 +150,15 @@ export default function Profile() {
             onClick={() => navigate(`/diary?user=${profileOwner}`)}
           >
             <p className="text-gray-400 text-sm">Diary</p>
-            <p className="text-xl font-bold text-[#90C67C]">{diaryCount}</p>
+            <p className="text-xl font-bold text-[#90C67C]">
+              {diaryCount}
+            </p>
           </motion.div>
         )}
       </div>
 
-      {/* Followers / Following lists */}
+      {/* Followers / Following */}
       <div className="flex gap-6 flex-wrap mb-10">
-        {/* Followers */}
         <div className="w-full md:w-1/2">
           <button
             className="text-gray-300 hover:text-[#E1EEBC] font-medium"
@@ -145,7 +182,6 @@ export default function Profile() {
           )}
         </div>
 
-        {/* Following */}
         <div className="w-full md:w-1/2">
           <button
             className="text-gray-300 hover:text-[#E1EEBC] font-medium"
