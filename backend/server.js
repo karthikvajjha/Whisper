@@ -42,7 +42,7 @@ app.use('/api' , gameRouter);
 
 app.get("/", (req, res) => res.send("Server is running"));
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000 ;
 
 mongoose.connect(process.env.MONGO_URL)
 .then(() => {
