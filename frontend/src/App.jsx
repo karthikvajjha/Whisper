@@ -46,11 +46,6 @@ export default function App() {
         <Route path="/blog/:id" element={token ? <BlogView /> : <Navigate to="/signup" />} />
         <Route path="/diary/:id" element={token ? <DiaryView /> : <Navigate to="/signup" />} />
         <Route path="/edit/:id" element={token ? <EditPost /> : <Navigate to="/signup" />} />
-
-        {/* New Game Routes */}
-        <Route path="/quiz" element={token ? <QuizGame /> : <Navigate to="/signup" />} />
-        <Route path="/scenario" element={token ? <ScenarioGame /> : <Navigate to="/signup" />} />
-        <Route path="/leaderboard" element={token ? <Leaderboard /> : <Navigate to="/signup" />} />
       </Routes>
     </Router>
   );

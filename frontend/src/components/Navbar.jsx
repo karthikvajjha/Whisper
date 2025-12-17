@@ -29,9 +29,7 @@ function Navbar() {
   { name: "Blogs", path: "/blogs" },
   { name: "Diary", path: "/diary" },
   { name: "Create", path: "/create" },
-  { name: "Quiz", path: "/quiz" },
-  { name: "Scenario", path: "/scenario" },
-  { name: "Leaderboard", path: "/leaderboard" },
+  
 
 
   ];
